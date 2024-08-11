@@ -2,7 +2,9 @@ package com.forleven.demo.controller;
 
 import com.forleven.demo.data.AlunoDTO;
 import com.forleven.demo.data.AlunoEntity;
+import com.forleven.demo.data.TelefoneEntity;
 import com.forleven.demo.service.AlunoService;
+import com.forleven.demo.service.TelefoneService;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/aluno")
 public class AlunoController {
-    
+
     @Autowired
     AlunoService alunoService;
+
+    @Autowired
+    TelefoneService telefoneService;
     
     //Obtém dados para cadastrar novo aluno
     @PostMapping("/adicionar")
@@ -30,32 +35,41 @@ public class AlunoController {
         var novoAluno = alunoService.cadastrarAluno(a);
         return new ResponseEntity<>(novoAluno, HttpStatus.CREATED);
     }
-    
+
     //Lista todos os alunos cadastrados
     @GetMapping("/listar")
     public ResponseEntity<List<AlunoEntity>> getAllAlunos() {
         List<AlunoEntity> alunos = alunoService.listarTodosAlunos();
         return new ResponseEntity<>(alunos, HttpStatus.OK);
     }
-    
+
     //Pesquisa aluno por ID
     @GetMapping("/pesquisar/{id}")
     public ResponseEntity<AlunoEntity> getAlunoById(@PathVariable Integer id) {
         AlunoEntity aluno = alunoService.getAlunoId(id);
         return new ResponseEntity<>(aluno, HttpStatus.OK);
     }
-    
+
     //Obtém dados para atualizar aluno
     @PutMapping("/atualizar/{id}")
     public ResponseEntity<AlunoEntity> atualizarAluno(@PathVariable Integer id, @RequestBody AlunoDTO aluno) {
         var alunoAtualizado = alunoService.atualizarAluno(id, aluno);
         return new ResponseEntity<>(alunoAtualizado, HttpStatus.OK);
     }
-    
+
     //Verifica e deleta aluno
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<Void> deletarAluno(@PathVariable Integer id) {
         alunoService.deletarAluno(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    //--------
+    
+    //Obtém telefones para adicionar ao aluno por ID
+    @PostMapping("/{alunoId}/telefone/cadastrar")
+    public ResponseEntity<List<TelefoneEntity>> adicionarTelefoneAoAluno(@PathVariable Integer alunoId, @Valid @RequestBody List<TelefoneEntity> novoTelefone) {
+        List<TelefoneEntity> telefones = telefoneService.cadastrarTelefone(alunoService.getAlunoId(alunoId), novoTelefone);
+        return new ResponseEntity<>(telefones, HttpStatus.CREATED);
     }
 }
