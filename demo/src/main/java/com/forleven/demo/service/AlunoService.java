@@ -3,6 +3,8 @@ package com.forleven.demo.service;
 import com.forleven.demo.data.AlunoEntity;
 import com.forleven.demo.data.AlunoRepository;
 import com.forleven.demo.exception.MatriculaExistsException;
+import com.forleven.demo.exception.ResourceNotFoundException;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +30,15 @@ public class AlunoService {
     //Verificar se matrícula já existe no banco
     public boolean existeMatricula(String matricula) {
         return alunoRepository.existsByMatricula(matricula);
+    }
+    
+    //Obter aluno por ID
+    public AlunoEntity getAlunoId(Integer alunoId) {
+        return alunoRepository.findById(alunoId).orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado: " + alunoId));
+    }
+    
+    //Obter todos os alunos
+    public List<AlunoEntity> listarTodosAlunos(){
+        return alunoRepository.findAll();
     }
 }
