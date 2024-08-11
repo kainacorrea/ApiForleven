@@ -66,4 +66,10 @@ public class AlunoService {
         
         return aluno;
     }
+    
+    //Deletar aluno por ID
+    public void deletarAluno(Integer alunoId){
+        AlunoEntity aluno = getAlunoId(alunoId);
+        alunoRepository.deleteById(aluno.getId());
+    }
 }
