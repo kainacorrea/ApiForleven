@@ -1,5 +1,6 @@
 package com.forleven.demo.controller;
 
+import com.forleven.demo.data.AlunoDTO;
 import com.forleven.demo.data.AlunoEntity;
 import com.forleven.demo.service.AlunoService;
 import jakarta.validation.Valid;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,5 +42,12 @@ public class AlunoController {
     public ResponseEntity<AlunoEntity> getAlunoById(@PathVariable Integer id) {
         AlunoEntity aluno = alunoService.getAlunoId(id);
         return new ResponseEntity<>(aluno, HttpStatus.OK);
+    }
+    
+    //Obtém dados para atualizar aluno
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<AlunoEntity> atualizarAluno(@PathVariable Integer id, @RequestBody AlunoDTO aluno) {
+        var alunoAtualizado = alunoService.atualizarAluno(id, aluno);
+        return new ResponseEntity<>(alunoAtualizado, HttpStatus.OK);
     }
 }

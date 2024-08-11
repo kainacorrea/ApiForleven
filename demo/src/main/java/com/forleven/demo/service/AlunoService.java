@@ -1,5 +1,6 @@
 package com.forleven.demo.service;
 
+import com.forleven.demo.data.AlunoDTO;
 import com.forleven.demo.data.AlunoEntity;
 import com.forleven.demo.data.AlunoRepository;
 import com.forleven.demo.exception.MatriculaExistsException;
@@ -40,5 +41,29 @@ public class AlunoService {
     //Obter todos os alunos
     public List<AlunoEntity> listarTodosAlunos(){
         return alunoRepository.findAll();
+    }
+    
+    //Atualizar dados de aluno
+    public AlunoEntity atualizarAluno(Integer alunoId, AlunoDTO alunoRequest) {
+        AlunoEntity aluno = getAlunoId(alunoId);
+        
+        //Verifica campo vazio; se não, atualiza nome
+        if(alunoRequest.getNome() != null && !alunoRequest.getNome().isBlank()){
+            aluno.setNome(alunoRequest.getNome());
+        }
+        
+        //Verifica campo vazio; se não, atualiza sobrenome
+        if (alunoRequest.getSobrenome() != null && !alunoRequest.getSobrenome().isBlank()){
+            aluno.setSobrenome(alunoRequest.getSobrenome());
+        }
+        
+        //Verifica campo vazio; se não, atualiza matrícula
+        if (alunoRequest.getMatricula() != null && !alunoRequest.getMatricula().isBlank()){
+            aluno.setMatricula(alunoRequest.getMatricula());
+        }
+        
+        alunoRepository.save(aluno);
+        
+        return aluno;
     }
 }
